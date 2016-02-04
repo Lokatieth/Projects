@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/21 17:30:33 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/02/03 23:47:54 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/02/03 23:37:33 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int		return_line(char **line, char **rest)
 {
 	char		*tmp;
 
-	*line = ft_strsubopt(*rest, 0, ft_strchr(*rest, '\n') - *rest);
+	*line = ft_strsub(*rest, 0, ft_strchr(*rest, '\n') - *rest);
 	tmp = *rest;
-	*rest = ft_strsubopt(*rest, ft_strlen(*line) + 1,
+	*rest = ft_strsub(*rest, ft_strlen(*line) + 1,
 		ft_strlen(*rest) - ft_strlen(*line));
 	free(tmp);
 	return (1);
