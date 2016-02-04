@@ -12,6 +12,15 @@
 
 #include "get_next_line.h"
 
+int		ft_check_values(int ret, int fd)
+{
+	if (ret < 0 || fd < 0)
+		return (-1);
+	if (BUFF_SIZE <= 0)
+		return (-1);
+	return (1);
+}
+
 int		return_line(char **line, char **rest)
 {
 	char		*tmp;
@@ -27,11 +36,11 @@ int		return_line(char **line, char **rest)
 int		get_next_line(int const fd, char **line)
 {
 	static char	*rest = NULL;
-	char		buffer[BUFF_SIZE + 1];
+	char		buffer[SIZE + 1];
 	int			ret;
 
 	if (!rest)
-		rest = ft_strnew(BUFF_SIZE);
+		rest = ft_strnew(1);
 	if (ft_strchr(rest, '\n'))
 		return (return_line(line, &rest));
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
@@ -41,7 +50,7 @@ int		get_next_line(int const fd, char **line)
 		if (ft_strchr(rest, '\n'))
 			return (return_line(line, &rest));
 	}
-	if (ret < 0 || fd < 0)
+	if (ft_check_values(ret, fd) == -1)
 		return (-1);
 	if (ft_strlen(rest) > 0)
 	{

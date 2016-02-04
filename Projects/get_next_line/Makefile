@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = get_next_line_exec
+NAME = get_next_line
 
 SRC = 	get_next_line.c main.c\
 

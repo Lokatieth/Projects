@@ -17,10 +17,10 @@ typedef struct	s_id
 {
 	void *win;
 	void *mlx;
-	int x0;
 	int x1;
+	int x2;
 	int y1;
-	int y0;
+	int y2;
 
 }				t_id;
 
