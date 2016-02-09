@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/21 17:30:33 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/02/03 23:37:33 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/02/09 10:55:44 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,27 @@ int		return_line(char **line, char **rest)
 
 int		get_next_line(int const fd, char **line)
 {
-	static char	*rest = NULL;
+	static char	*rest[256];
 	char		buffer[SIZE + 1];
 	int			ret;
 
-	if (!rest)
-		rest = ft_strnew(1);
-	if (ft_strchr(rest, '\n'))
-		return (return_line(line, &rest));
+	if (!rest[fd])
+		rest[fd] = ft_strnew(1);
+	if (ft_strchr(rest[fd], '\n'))
+		return (return_line(line, &rest[fd]));
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
-		rest = ft_strjoinopt(rest, buffer);
-		if (ft_strchr(rest, '\n'))
-			return (return_line(line, &rest));
+		rest[fd] = ft_strjoinopt(rest[fd], buffer);
+		if (ft_strchr(rest[fd], '\n'))
+			return (return_line(line, &rest[fd]));
 	}
 	if (ft_check_values(ret, fd) == -1)
 		return (-1);
-	if (ft_strlen(rest) > 0)
+	if (ft_strlen(rest[fd]) > 0)
 	{
-		*line = ft_strdup(rest);
-		rest = NULL;
+		*line = ft_strdup(rest[fd]);
+		rest[fd] = NULL;
 		return (1);
 	}
 	return (0);
