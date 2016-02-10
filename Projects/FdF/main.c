@@ -6,16 +6,11 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/29 09:09:13 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/02/09 15:54:50 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/02/10 12:57:32 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
 #include "header.h"
-#include "mlx.h"
-#include <stdio.h>
-#include "libft/libft.h"
 
 void ft_display_points(t_id *s)
 {	
@@ -25,11 +20,14 @@ void ft_display_points(t_id *s)
 	int y;
 	int hor_dist;
 	int ver_dist;
+	double dy;
+	int color;
 
+	dy = 4;
 	j = 0;
 	i = 0;
-	hor_dist = WIN_LENGHT / s->k;
-	ver_dist = WIN_HEIGHT / s->i;
+	hor_dist = (WIN_LENGHT - 2 * LENGHT_MARGIN) / s->k;
+	ver_dist = (WIN_HEIGHT - 2 * HEIGHT_MARGIN) / s->i;
 	printf("hauteur de la fenetre  = %d\n", WIN_HEIGHT);
 	printf("hauteur du tableau d'int  = %d\n", s->i);
 	printf("intervalle vertical entre deux points = %d\n\n", ver_dist);
@@ -38,21 +36,25 @@ void ft_display_points(t_id *s)
 	printf("largeur du tableau d'int  = %d\n", s->k);
 	printf("intervalle horizontal entre deux points = %d\n", hor_dist);
 
-	y = ver_dist;
+	y = ver_dist + HEIGHT_MARGIN;
 	j = 0;
-	while (y <= WIN_HEIGHT)
+	while (j < s->i)
 	{
-		x = hor_dist;
+		x = hor_dist + LENGHT_MARGIN;
 		i = 0;
-		while (x <= WIN_LENGHT)
-		{
-			if ((i < s->k) && (j < s->i))
-			{
-				ft_bresenham(x, y - s->map[j][i] * 3, x + hor_dist, y - s->map[j][i + 1] * 3, s, 0x00FFFFFF);
-				ft_bresenham(x, y - s->map[j][i] * 3, x, y + s->map[j][i + 1] * 3 + ver_dist, s, 0x00FFFFFF);
-				ft_bresenham(x, y - s->map[j][i] * 3, x + hor_dist, y - s->map[j + 1][i + 1] * 3 + ver_dist, s, 0x00FFFFFF);
-			}
-			mlx_pixel_put(s->mlx, s->win, x, y, 0x00FFFFFF);
+		while (i < s->k)
+		{	
+			if (s->map[j][i] > 5 || s->map[j][i + 1] > 5)
+				color = 0x00FF0000;
+			else
+				color = 0x00FFFFFF;
+			if (x <= WIN_LENGHT - hor_dist - LENGHT_MARGIN)
+				ft_bresenham(x, y - s->map[j][i] * dy, x + hor_dist, y - s->map[j][i + 1] * dy, s, color);
+			if (y <= WIN_HEIGHT - ver_dist - HEIGHT_MARGIN)
+				ft_bresenham(x, y - s->map[j][i] * dy, x, y + s->map[j][i + 1] * dy + ver_dist, s, color);
+			// if (j + 1 < s->i && y <= WIN_HEIGHT - ver_dist  - HEIGHT_MARGIN && x <= WIN_LENGHT - hor_dist - LENGHT_MARGIN)
+				// ft_bresenham(x, y - s->map[j][i] * dy, x + hor_dist, y - s->map[j + 1][i + 1] * dy + ver_dist, s, 0x00FFFFFF);
+			// mlx_initpixel_put(s->mlx, s->win, x, y, 0x00FF0000);
 			x = x + hor_dist;
 			i++;
 		}
@@ -66,8 +68,6 @@ void ft_display_points(t_id *s)
 
 void ft_bresenham(int x0, int y0, int x1, int y1, t_id *s, int color)
 {
-
-
 	s->dx = ft_abs(x1 - x0);
 	s->dy = ft_abs(y1 - y0);
 	s->sx = x0 < x1 ? 1 : -1;

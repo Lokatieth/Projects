@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/01 20:48:17 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/02/09 14:38:37 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/02/10 11:51:54 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,18 @@
 # define HEADER_H
 # define BUFF_SIZE 30
 # define WIN_HEIGHT 900
+# define HEIGHT_MARGIN WIN_HEIGHT / 5
 # define WIN_LENGHT 1200
-# define WIN_NAME "ALLEZ TOUS BOUFFER DES QUEUES BANDE DE GARGOUILLEURS DE BITE !"
+# define LENGHT_MARGIN WIN_LENGHT / 5
+# define WIN_NAME "FDF.42 t(*-*t)"
 
 # include <fcntl.h>
 # include <unistd.h>
+# include <stdlib.h>
+# include "mlx.h"
+# include <stdio.h>
 # include "libft/libft.h"
+
 
 typedef struct	s_id
 {
