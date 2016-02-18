@@ -37,11 +37,11 @@ int		get_next_line(int const fd, char **line)
 	char		buffer[SIZE + 1];
 	int			ret;
 
-	if (!rest[fd] && fd < 256)
+	if (fd < 256 && fd >= 0 && !rest[fd])
 		rest[fd] = ft_strnew(1);
-	if (ft_strchr(rest[fd], '\n') && fd < 256)
+	if (fd >= 0 && fd < 256 && ft_strchr(rest[fd], '\n'))
 		return (return_line(line, &rest[fd]));
-	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0 && fd >= 0 && fd < 256)
+	while (fd >= 0 && fd < 256 && (ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
 		rest[fd] = ft_strjoinopt(rest[fd], buffer);
