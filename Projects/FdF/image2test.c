@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   image2test.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/29 09:09:13 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/02/24 18:37:22 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/02/25 18:20:17 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,56 +21,47 @@ void ft_display_points(t_id *s)
 	int hor_dist;
 	int ver_dist;
 	double dy;
-	int color;
 
-	dy = 4;
+	dy = 0.5;
 	j = 0;
 	i = 0;
-	hor_dist = (WIN_WIDTH - 2 * WIDTH_MARGIN) / s->k;
-	ver_dist = (WIN_HEIGHT - 2 * HEIGHT_MARGIN) / s->i;
-	printf("hauteur de la fenetre  = %d\n", WIN_HEIGHT);
-	printf("hauteur du tableau d'int  = %d\n", s->i);
-	printf("intervalle vertical entre deux points = %d\n\n", ver_dist);
+	hor_dist = IMG_WIDTH / s->k;
+	ver_dist = IMG_HEIGHT / s->i;
+	// printf("hauteur de la fenetre  = %d\n", WIN_HEIGHT);
+	// printf("hauteur du tableau d'int  = %d\n", s->i);
+	// printf("intervalle vertical entre deux points = %d\n\n", ver_dist);
 
-	printf("largeur de la fenetre  = %d\n", WIN_WIDTH);
-	printf("largeur du tableau d'int  = %d\n", s->k);
-	printf("intervalle horizontal entre deux points = %d\n", hor_dist);
+	// printf("largeur de la fenetre  = %d\n", WIN_WIDTH);
+	// printf("largeur du tableau d'int  = %d\n", s->k);
+	// printf("intervalle horizontal entre deux points = %d\n", hor_dist);
 
-	y = ver_dist + HEIGHT_MARGIN;
+	y = ver_dist;
 	j = 0;
 	while (j < s->i)
 	{
-		x = hor_dist + WIDTH_MARGIN;
+		x = hor_dist;
 		i = 0;
 		while (i < s->k)
 		{	
-			if (s->map[j][i] > 5 || s->map[j][i + 1] > 5)
-				color = 0x00FF0000;
-			else
-				color = 0x00FFFFFF;
-			if (x <= WIN_WIDTH - hor_dist - WIDTH_MARGIN)
-			{
-				ft_bresenham(x y +- s->map[j][i] * dy, x + hor_dist, y - s->map[j][i + 1] * dy, s, color);
-				// printf("x = %d\n", x);
-				// printf("y = %d\n", y);
-			}
-			if (y <= WIN_HEIGHT - ver_dist - HEIGHT_MARGIN)
-				ft_bresenham(x, y - s->map[j][i] * dy, x, y + s->map[j][i + 1] * dy + ver_dist, s, color);
+			if (x <= IMG_WIDTH - hor_dist)
+				ft_bresenham(x, y - s->map[j][i] * dy, x + hor_dist, y - s->map[j][i + 1] * dy, s);
+			if (y <= IMG_HEIGHT - ver_dist)
+				ft_bresenham(x, y - s->map[j][i] * dy, x, y + s->map[j][i + 1] * dy + ver_dist, s);
 			// if (j + 1 < s->i && y <= WIN_HEIGHT - ver_dist  - HEIGHT_MARGIN && x <= WIN_WIDTH - hor_dist - WIDTH_MARGIN)
 				// ft_bresenham(x, y - s->map[j][i] * dy, x + hor_dist, y - s->map[j + 1][i + 1] * dy + ver_dist, s, 0x00FFFFFF);
-			// mlx_initpixel_put(s->mlx, s->win, x, y, 0x00FF0000);
 			x = x + hor_dist;
 			i++;
 		}
 		y = y + ver_dist;
 		j++;
 	}
+	mlx_put_image_to_window(s->mlx, s->win, s->img, WIN_WIDTH / 10, WIN_HEIGHT / 10);
 
 
 
 }
 
-void ft_bresenham(int x0, int y0, int x1, int y1, t_id *s, int color)
+void ft_bresenham(int x0, int y0, int x1, int y1, t_id *s)
 {
 	s->dx = ft_abs(x1 - x0);
 	s->dy = ft_abs(y1 - y0);
@@ -79,7 +70,7 @@ void ft_bresenham(int x0, int y0, int x1, int y1, t_id *s, int color)
 	s->err = (s->dx > s->dy ? s->dx : -s->dy) / 2;
 	while (1)
 	{
- 	   mlx_pixel_put(s->mlx, s->win, x0, y0, color);
+ 	   	mlx_image_put_pixel(s, x0, y0);
     	if (x0 == x1 && y0 == y1)
     		break;
    		s->e2 = s->err;
@@ -98,11 +89,15 @@ void ft_bresenham(int x0, int y0, int x1, int y1, t_id *s, int color)
 
 int key_reaction(int keycode, t_id *param)
 {
+	// int x;
+	// int y;
 
 	if (keycode == 53)
 		exit(0);
 	if (keycode == 49)
+	{
 		ft_display_points(param);
+	}
 	return (0);	
 }
 
@@ -112,50 +107,29 @@ int *ft_parsing(char *str)
 	int i;
 	static int j;
 	char **char_to_int;
-	// int **map;
-	// int k;
-	// int l;
 
 	tab = (int *)malloc(sizeof(int) * ft_get_number_of_words(str, ' '));
 	char_to_int = ft_strsplit(str, ' ');
 	j = 0;
-	i = 0;
-
-	// map = (int **)malloc(sizeof(int *) * ft_get_number_of_lines(str));
-
-	while (char_to_int[i])
-	{
+	i = -1;
+	while (char_to_int[++i])
 		tab[i] = ft_atoi(char_to_int[i]);
-		// printf("%d ", ft_atoi(char_to_int[i]));
-		i++;
-	}
-	// map[j] = tab;
-	// j++;
-	// k = 0;
-	// l = 0;
-	// while (k < i)
-	// {	
-	// 	while (l < i)
-	// 	{
-	// 		printf("%d ", map[k][l]);
-	// 		l++;
-	// 	}
-	// 	k++;
-	// }
-	// printf("\n");
-
-
-	// ft_print_int_2d_tab(map, i);
 	return (tab);
 }
 
+void mlx_image_put_pixel(t_id *s, int x, int y)
+{	
+	s->color = mlx_get_color_value (s->mlx, 0xFFFFFF);
+
+	if (x > 0 && x <= IMG_WIDTH && y > 0 && y <= IMG_HEIGHT)
+		*(unsigned int *)(s->data + ((int)s->bpp * x) + (s->s_line * y)) = s->color;
+}
 
 int main(int argc, char **argv)
 {
 	t_id s;
 	int fd;
 	char *line;
-	// int i;
 	(void)argc;
 	int x;
 	int y;
@@ -177,41 +151,45 @@ int main(int argc, char **argv)
 		s.k = (int)ft_get_number_of_words(line, ' ');
 		s.i++;
 	}
-	while (y < s.i)
-	{	
-		x = 0;
-		while (x < s.k)
-		{
-			printf("%d ", s.map[y][x]);
-			x++;
-		}
-		printf("\n");
-		y++;
-	}
-
-
-	// printf("Nombre total de tours : %d\n", i);
-
-
 	s.mlx = mlx_init();
+
 	s.win = mlx_new_window(s.mlx, WIN_WIDTH, WIN_HEIGHT, WIN_NAME);
 
+	s.img = mlx_new_image(s.mlx, WIN_WIDTH, WIN_HEIGHT);
 
-	// y = 250;
-	// while (y < 650)
-	// {
-	// 	x = 300;
-	// 	while (x < 900)
-	// 	{
-	// 		mlx_pixel_put(s->mlx, s->win, x, y, 0x00FFFFFF);
-	// 		x++;
-	// 	}
-	// 	y++;	
-	// }
-
-
+	s.data = mlx_get_data_addr(s.img, &s.bit_per_pixel, &s.s_line, &s.endian);
+	s.bpp = s.bit_per_pixel / 8;
 
 	mlx_key_hook(s.win, key_reaction, &s);
+
 	mlx_loop(s.mlx);
+
 	return (0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
