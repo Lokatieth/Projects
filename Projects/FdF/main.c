@@ -6,212 +6,103 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/29 09:09:13 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/02/24 18:37:22 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/03/16 15:27:52 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void ft_display_points(t_id *s)
-{	
-	int i;
-	int j;
-	int x;
-	int y;
-	int hor_dist;
-	int ver_dist;
-	double dy;
-	int color;
-
-	dy = 4;
-	j = 0;
-	i = 0;
-	hor_dist = (WIN_WIDTH - 2 * WIDTH_MARGIN) / s->k;
-	ver_dist = (WIN_HEIGHT - 2 * HEIGHT_MARGIN) / s->i;
-	printf("hauteur de la fenetre  = %d\n", WIN_HEIGHT);
-	printf("hauteur du tableau d'int  = %d\n", s->i);
-	printf("intervalle vertical entre deux points = %d\n\n", ver_dist);
-
-	printf("largeur de la fenetre  = %d\n", WIN_WIDTH);
-	printf("largeur du tableau d'int  = %d\n", s->k);
-	printf("intervalle horizontal entre deux points = %d\n", hor_dist);
-
-	y = ver_dist + HEIGHT_MARGIN;
-	j = 0;
-	while (j < s->i)
-	{
-		x = hor_dist + WIDTH_MARGIN;
-		i = 0;
-		while (i < s->k)
-		{	
-			if (s->map[j][i] > 5 || s->map[j][i + 1] > 5)
-				color = 0x00FF0000;
-			else
-				color = 0x00FFFFFF;
-			if (x <= WIN_WIDTH - hor_dist - WIDTH_MARGIN)
-			{
-				ft_bresenham(x y +- s->map[j][i] * dy, x + hor_dist, y - s->map[j][i + 1] * dy, s, color);
-				// printf("x = %d\n", x);
-				// printf("y = %d\n", y);
-			}
-			if (y <= WIN_HEIGHT - ver_dist - HEIGHT_MARGIN)
-				ft_bresenham(x, y - s->map[j][i] * dy, x, y + s->map[j][i + 1] * dy + ver_dist, s, color);
-			// if (j + 1 < s->i && y <= WIN_HEIGHT - ver_dist  - HEIGHT_MARGIN && x <= WIN_WIDTH - hor_dist - WIDTH_MARGIN)
-				// ft_bresenham(x, y - s->map[j][i] * dy, x + hor_dist, y - s->map[j + 1][i + 1] * dy + ver_dist, s, 0x00FFFFFF);
-			// mlx_initpixel_put(s->mlx, s->win, x, y, 0x00FF0000);
-			x = x + hor_dist;
-			i++;
-		}
-		y = y + ver_dist;
-		j++;
-	}
-
-
-
-}
-
-void ft_bresenham(int x0, int y0, int x1, int y1, t_id *s, int color)
+void	ft_bresenham(t_id *s, int col)
 {
-	s->dx = ft_abs(x1 - x0);
-	s->dy = ft_abs(y1 - y0);
-	s->sx = x0 < x1 ? 1 : -1;
-	s->sy = y0 < y1 ? 1 : -1;
+	s->dx = ft_abs(s->x1 - s->x0);
+	s->dy = ft_abs(s->y1 - s->y0);
+	s->sx = s->x0 < s->x1 ? 1 : -1;
+	s->sy = s->y0 < s->y1 ? 1 : -1;
 	s->err = (s->dx > s->dy ? s->dx : -s->dy) / 2;
 	while (1)
 	{
- 	   mlx_pixel_put(s->mlx, s->win, x0, y0, color);
-    	if (x0 == x1 && y0 == y1)
-    		break;
-   		s->e2 = s->err;
-    	if (s->e2 > -s->dx)
-    	{
-    		s->err-= s->dy;
-    		x0+= s->sx;
-    	}
-    	if (s->e2 < s->dy)
-    	{
-    		s->err+= s->dx;
-    		y0+= s->sy; 
-    	}
+		mlx_image_put_pixel(s, s->x0, s->y0, col);
+		if (s->x0 == s->x1 && s->y0 == s->y1)
+			break ;
+		s->e2 = s->err;
+		if (s->e2 > -s->dx)
+		{
+			s->err = s->err - s->dy;
+			s->x0 = s->x0 + s->sx;
+		}
+		if (s->e2 < s->dy)
+		{
+			s->err = s->err + s->dx;
+			s->y0 = s->y0 + s->sy;
+		}
 	}
 }
 
-int key_reaction(int keycode, t_id *param)
+int		key_reaction(int keycode, t_id *param)
 {
-
 	if (keycode == 53)
 		exit(0);
-	if (keycode == 49)
-		ft_display_points(param);
-	return (0);	
+	if (keycode == 69 || keycode == 78)
+		ft_zoom(param, keycode);
+	if (keycode == 124 || keycode == 123)
+		ft_move_hor(param, keycode);
+	if (keycode == 126 || keycode == 125)
+		ft_move_ver(param, keycode);
+	if (keycode == 116 || keycode == 121)
+		ft_leveling(param, keycode);
+	if (keycode == 43 || keycode == 47)
+		ft_horizontal_shift(param, keycode);
+	mlx_put_image_to_window(param->mlx, param->win, param->img, 0, 0);
+	return (0);
 }
 
-int *ft_parsing(char *str)
+int		*ft_parsing(char *str)
 {
-	int *tab;
-	int i;
-	static int j;
-	char **char_to_int;
-	// int **map;
-	// int k;
-	// int l;
+	int			*tab;
+	int			i;
+	static int	j;
+	char		**char_to_int;
 
 	tab = (int *)malloc(sizeof(int) * ft_get_number_of_words(str, ' '));
 	char_to_int = ft_strsplit(str, ' ');
 	j = 0;
-	i = 0;
-
-	// map = (int **)malloc(sizeof(int *) * ft_get_number_of_lines(str));
-
-	while (char_to_int[i])
-	{
+	i = -1;
+	while (char_to_int[++i])
 		tab[i] = ft_atoi(char_to_int[i]);
-		// printf("%d ", ft_atoi(char_to_int[i]));
-		i++;
-	}
-	// map[j] = tab;
-	// j++;
-	// k = 0;
-	// l = 0;
-	// while (k < i)
-	// {	
-	// 	while (l < i)
-	// 	{
-	// 		printf("%d ", map[k][l]);
-	// 		l++;
-	// 	}
-	// 	k++;
-	// }
-	// printf("\n");
-
-
-	// ft_print_int_2d_tab(map, i);
 	return (tab);
 }
 
-
-int main(int argc, char **argv)
+void	mlx_image_put_pixel(t_id *s, int x, int y, int col)
 {
-	t_id s;
-	int fd;
-	char *line;
-	// int i;
+	s->color = mlx_get_color_value(s->mlx, col);
+	if (x > 0 && x < W_X && y > 0 && y < W_Y)
+		*(unsigned int *)(s->data + ((int)s->bpp * x) +
+				(s->s_line * y)) = s->color;
+}
+
+int		main(int argc, char **argv)
+{
+	t_id	s;
+	int		fd;
+	char	*line;
+
 	(void)argc;
-	int x;
-	int y;
-
-	x = 0;
-	y = 0;	
+	if (ft_fdf_check(argv[1]) == 0)
+		ft_error();
 	fd = open(argv[1], O_RDONLY);
-	s.i = 0;
-
-	while ((get_next_line(fd, &line)) > 0) 
-				++s.i;
-	s.map = (int **)malloc(sizeof(int *) * s.i);
-	s.i = 0;
+	s.nl = 0;
+	while ((get_next_line(fd, &line)) > 0)
+		++s.nl;
+	s.map = (int **)malloc(sizeof(int *) * s.nl);
+	s.nl = 0;
 	close(fd);
 	fd = open(argv[1], O_RDONLY);
 	while ((get_next_line(fd, &line)) > 0)
-	{	
-		s.map[s.i] = ft_parsing(line);
-		s.k = (int)ft_get_number_of_words(line, ' ');
-		s.i++;
+	{
+		s.map[s.nl] = ft_parsing(line);
+		s.nc = (int)ft_get_number_of_words(line, ' ');
+		s.nl++;
 	}
-	while (y < s.i)
-	{	
-		x = 0;
-		while (x < s.k)
-		{
-			printf("%d ", s.map[y][x]);
-			x++;
-		}
-		printf("\n");
-		y++;
-	}
-
-
-	// printf("Nombre total de tours : %d\n", i);
-
-
-	s.mlx = mlx_init();
-	s.win = mlx_new_window(s.mlx, WIN_WIDTH, WIN_HEIGHT, WIN_NAME);
-
-
-	// y = 250;
-	// while (y < 650)
-	// {
-	// 	x = 300;
-	// 	while (x < 900)
-	// 	{
-	// 		mlx_pixel_put(s->mlx, s->win, x, y, 0x00FFFFFF);
-	// 		x++;
-	// 	}
-	// 	y++;	
-	// }
-
-
-
-	mlx_key_hook(s.win, key_reaction, &s);
-	mlx_loop(s.mlx);
+	ft_first_creation(s);
 	return (0);
 }
