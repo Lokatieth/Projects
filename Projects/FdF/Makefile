@@ -6,13 +6,17 @@
 #    By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/26 11:26:20 by vbauguen          #+#    #+#              #
-#    Updated: 2016/02/08 10:46:45 by vbauguen         ###   ########.fr        #
+#    Updated: 2016/03/16 15:04:51 by vbauguen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = mlx\
+NAME = fdf\
 
-SRC = main.c\
+SRC =	main.c\
+		ft_images.c\
+		ft_bonus.c\
+		ft_fdf_check.c\
+# SRC = image.c\
 
 OBJ = $(SRC:.c=.o)
 
@@ -33,8 +37,10 @@ $(NAME): $(OBJ)
 
 clean:
 	@rm -rf $(OBJ)
+	make -C libft clean
 
 fclean: clean
 	@rm -rf $(NAME)
+	make -C libft fclean
 
 re: fclean all

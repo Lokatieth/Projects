@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 13:56:49 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/03/16 16:01:42 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/03/17 11:51:29 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,7 @@ void	ft_display_ver(t_id *s)
 				+ s->slide * s->y0;
 			s->x1 = W_X / 2 - (s->nc / 2 * s->dp) + (i * s->dp) + s->decalx
 				+ s->slide * s->y1;
-			// if (s->map[j][i] == 0  && s->map[j][i + 1] == 0)
-			s->col = 0x0000FF;
-			if (j > 1)
-			{
-				if (s->map[j][i] == 0 && (s->map[j + 1][i] > 0 || s->map[j - 1][i] > 0))
-					s->col = 0x87591A;
-			}
-			if (s->map[j][i] > 0 && s->map[j + 1][i] > 0)
-				s->col = 0x00FF00;
+			ft_color_vertical(s, i, j);
 			ft_bresenham(s, s->col);
 			i++;
 		}
@@ -76,13 +68,7 @@ void	ft_display_hor(t_id *s)
 				+ s->slide * s->y0;
 			s->x1 = W_X / 2 - (s->nc / 2 * s->dp) + ((i + 1) * s->dp)
 				+ s->decalx + s->slide * s->y1;
-			// if (s->map[j][i] == 0  && s->map[j][i + 1] == 0)
-				s->col = 0x0000FF;
-			// if (s->map[j][i] == 0 && (s->map[j][i + 1] > 0 || s->map[j][i - 1] > 0))
-				// s->col = 0x87591A;
-			if (s->map[j][i] > 0 && s->map[j][i + 1] > 0)
-				s->col = 0x00FF00;
-
+			ft_color_horizontal(s, i, j);
 			ft_bresenham(s, s->col);
 			i++;
 		}
