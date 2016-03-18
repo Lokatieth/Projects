@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 13:56:49 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/03/17 11:51:29 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/03/18 11:30:23 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	ft_display_hor(t_id *s)
 void	ft_initialization(t_id *s)
 {
 	s->dp = 25;
-	s->decalz = 1;
+	s->decalz = 0.2;
 	s->slide = 0.2;
 	s->img = mlx_new_image(s->mlx, W_X, W_Y);
 	s->data = mlx_get_data_addr(s->img, &s->bit_per_pixel, &s->s_line,

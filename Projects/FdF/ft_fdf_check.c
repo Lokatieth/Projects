@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 14:58:52 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/03/17 13:14:02 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/03/18 11:23:06 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_error(void)
 void	ft_color_vertical(t_id *s, int i, int j)
 {
 	s->col = 0x87591A;
-	if (s->map[j][i] == 0 && s->map[j + 1][i] == 0)
+	if (s->map[j][i] <= 0 && s->map[j + 1][i] <= 0)
 		s->col = 0x0000FF;
 	else if (s->map[j][i] > 0 && s->map[j + 1][i] > 0)
 		s->col = 0x00FF00;
@@ -47,7 +47,7 @@ void	ft_color_vertical(t_id *s, int i, int j)
 void	ft_color_horizontal(t_id *s, int i, int j)
 {
 	s->col = 0x87591A;
-	if (s->map[j][i] == 0 && s->map[j][i + 1] == 0)
+	if (s->map[j][i] <= 0 && s->map[j][i + 1] <= 0)
 		s->col = 0x0000FF;
 	else if (s->map[j][i] > 0 && s->map[j][i + 1] > 0)
 		s->col = 0x00FF00;

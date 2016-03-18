@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 13:39:10 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/03/16 14:52:23 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/03/18 11:31:45 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,14 @@ void	ft_leveling(t_id *param, int keycode)
 	if (keycode == 116)
 	{
 		ft_recreate_img(param);
-		param->decalz = param->decalz + 1;
+		param->decalz = param->decalz * 1.3;
 		ft_display_hor(param);
 		ft_display_ver(param);
 	}
 	if (keycode == 121)
 	{
 		ft_recreate_img(param);
-		if (param->decalz >= 1)
-			param->decalz = param->decalz - 1;
+		param->decalz = param->decalz / 1.3;
 		ft_display_hor(param);
 		ft_display_ver(param);
 	}
