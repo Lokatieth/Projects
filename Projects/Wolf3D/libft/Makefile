@@ -14,7 +14,7 @@ NAME = libft.a
 
 SRCS = ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c \
 	ft_isspace.c ft_strtrimchar.c ft_get_next_word.c \
-	ft_get_number_of_words.c \
+	ft_get_number_of_words.c ft_error.c free_tab.c \
 	ft_memchr.c ft_memcmp.c ft_strlen.c ft_strdup.c ft_strcpy.c \
 	ft_strncpy.c ft_strcat.c ft_strncat.c ft_strlcat.c ft_strchr.c \
 	ft_strrchr.c ft_strstr.c ft_strnstr.c ft_strcmp.c ft_atoi.c \

@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/05 15:05:51 by yyang             #+#    #+#             */
-/*   Updated: 2016/02/03 23:47:22 by vbauguen         ###   ########.fr       */
+/*   Updated: 2016/06/04 08:23:50 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 
+void				free_tab(char **tab);
 char				*ft_strrev(char *str);
 int					ft_size_int(int n);
 int					ft_isspace(int c);
@@ -96,5 +97,6 @@ char				*ft_strmchr(char *haystack, char *needles);
 char				*ft_strjoinopt(char *s1, char *s2);
 int					ft_abs(int nb);
 int					get_next_line(int fd, char **line);
+void				ft_error(char *str);
 
 #endif

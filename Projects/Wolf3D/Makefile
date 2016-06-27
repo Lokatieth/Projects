@@ -6,7 +6,7 @@
 #    By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/26 11:26:20 by vbauguen          #+#    #+#              #
-#    Updated: 2016/05/21 02:46:43 by vbauguen         ###   ########.fr        #
+#    Updated: 2016/06/06 14:54:34 by vbauguen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,17 @@ MAKEFLAGS += --silent
 
 NAME = wolf3d\
 
-# SRC = tuto_lodev.c
-SRC = backup.c
-
+SRC =	main.c\
+		initialisation.c\
+		ray.c\
+		draw.c\
+		reaction.c\
+		movement.c\
+		map_checking.c\
 
 OBJ = $(SRC:.c=.o)
 
-GCCF = -Wall -Werror -Wextra
+GCCF = -Wall -Werror -Wextra -g
 
 all: $(NAME)
 

@@ -5,103 +5,128 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/30 15:04:19 by vbauguen          #+#    #+#             */
-/*   Updated: 2016/05/02 18:42:07 by vbauguen         ###   ########.fr       */
+/*   Created: 2016/05/02 17:57:51 by vbauguen          #+#    #+#             */
+/*   Updated: 2016/06/06 15:10:27 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-int worldMap[mapWidth][mapHeight]=
+void	ft_next_map(t_id *s)
 {
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
-
-void	mlx_image_put_pixel(t_id *s, int x, int y, int col)
-{
-	s->color = mlx_get_color_value(s->mlx, col);
-	if (x > 0 && x < W_X && y > 0 && y < W_Y)
-		*(unsigned int *)(s->data + ((int)s->bpp * x) +
-				(s->s_line * y)) = s->color;
+	ft_start_new_map(s);
+	s->fd = open(s->niveau[s->level], O_RDONLY);
+	s->nl = 0;
+	while ((get_next_line(s->fd, &s->line)) > 0)
+	{
+		s->nc = ft_get_number_of_words(s->line, ' ');
+		++s->nl;
+		free(s->line);
+		s->line = NULL;
+	}
+	s->map = (int **)malloc(sizeof(int *) * s->nl);
+	s->tmp = s->nc;
+	s->nl = 0;
+	close(s->fd);
+	s->fd = open(s->niveau[s->level], O_RDONLY);
+	ft_check_map(s);
+	ft_check_borders(s);
+	ft_check_negatives(s);
+	close(s->fd);
+	ft_corps(s);
 }
 
-
-int	mouse_reaction(int button, int x, int y, t_id *s)
+void	ft_corps(t_id *s)
 {
-	s->img_x = 0;
-	s->img_x++;
-	printf("x = %d \t,y = %d \t, button  = %d \n", x, y, button);
- 	return (0);
+	int x;
+
+	x = -1;
+	while (++x < W_X)
+	{
+		ft_start_initialisation(x, s);
+		ft_ray_direction(s);
+		ft_dda(s);
+		ft_calc_pixl_place(s);
+		ft_calc_floor_place(s);
+		ft_draw_ceiling(x, s);
+		if (x == W_X - 1)
+			mlx_put_image_to_window(s->mlx, s->win, s->wall[13], MU, II);
+		ft_draw_floor(x, s);
+		ft_draw_walls(x, s);
+	}
+	mlx_put_image_to_window(s->mlx, s->win, s->img, 0, 0);
+	ft_static_xpm(s);
 }
 
-
-int ft_dda(t_id *s)
+int		ft_check_borders(t_id *s)
 {
-	for(int x = 0; x < w; x++)
-    {
-      	//calculate ray position and direction
-      	double cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
-      	double rayPosX = posX;
-      	double rayPosY = posY;
-      	double rayDirX = dirX + planeX * cameraX;
-      	double rayDirY = dirY + planeY * cameraX;
-      }
+	int i;
+	int j;
+
+	j = 0;
+	if (s->posx >= s->nl - 1 || s->posy >= s->nc - 1 ||
+		s->posx <= 0 || s->posy <= 0)
+		ft_error("Incorrect spawn position.\n");
+	if (s->nl < 3 || s->nc < 3)
+		ft_error("Map too small. The minimum size of a valid map is 3 x 3.\n");
+	while (j < s->nl)
+	{
+		i = 0;
+		while (i < s->nc)
+		{
+			if (i == 0 || i == s->nc - 1 || j == 0 || j == s->nl - 1)
+				if (s->map[j][i] <= 3 || s->map[j][i] > 9)
+					ft_error("The map is not bordered by solid walls.\n");
+			i++;
+		}
+		j++;
+	}
+	return (1);
 }
 
-
-int		key_reaction(int keycode, t_id *param)
+void	ft_first_spawn(t_id *s, char **argv)
 {
-	if (keycode == 53)
-		exit(0);
-	printf("%d\n", keycode);
-	mlx_put_image_to_window(param->mlx, param->win, param->img, 0, 0);
-	return (0);
+	s->posx = ft_atoi(argv[2]);
+	s->posy = ft_atoi(argv[3]);
+	s->fd = open(argv[1], O_RDONLY);
+	s->nl = 0;
+	while ((get_next_line(s->fd, &s->line)) > 0)
+	{
+		s->nc = ft_get_number_of_words(s->line, ' ');
+		++s->nl;
+		free(s->line);
+	}
+	s->map = (int **)malloc(sizeof(int *) * s->nl);
+	s->nl = 0;
+	s->tmp = s->nc;
+	close(s->fd);
+	s->fd = open(argv[1], O_RDONLY);
+	ft_check_map(s);
+	ft_check_borders(s);
+	ft_check_negatives(s);
+	close(s->fd);
 }
 
-void	ft_first_creation(t_id *s)
+int		main(int argc, char **argv)
 {
-	s->mlx = mlx_init();
-	s->win = mlx_new_window(s->mlx, W_X, W_Y, WIN_NAME);
+	t_id	s;
+	int		i;
 
-	mlx_mouse_hook (s->win, mouse_reaction, s);
-	mlx_key_hook(s->win, key_reaction, s);
-	mlx_loop(s->mlx);
-}
-
-int main()
-{
-	double posX = 22, posY = 12;
-	double dirX = -1, dirY = 0;
-	double planeX = 0, planeY = 0.66;
-	double time = 0;
-	double oldTime = 0;
-	t_id *s;
-
-	s = (t_id*)malloc(sizeof(t_id) * 100);
-	ft_first_creation(s);
-	ft_dda(s);
+	i = -1;
+	s.niveau = (char**)ft_memalloc(sizeof(char*) * 5);
+	while (++i < 5)
+		s.niveau[i] = (char*)ft_memalloc(sizeof(char) * 25);
+	i = -1;
+	s.weapon = (char**)ft_memalloc(sizeof(char*) * 10);
+	while (++i < 10)
+		s.weapon[i] = (char*)ft_memalloc(sizeof(char) * 25);
+	s.mlx = mlx_init();
+	s.win = mlx_new_window(s.mlx, W_X, W_Y, WIN_NAME);
+	ft_weapons_and_maps(&s);
+	if (argc != 4)
+		ft_error("Incorrect number of arguments.\n");
+	ft_first_spawn(&s, argv);
+	ft_initialisation(&s);
+	free(s.map);
 	return (0);
 }
