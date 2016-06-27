@@ -44,7 +44,7 @@ $(NAME): $(OBJ)
 # Compil Linux
 #	gcc -o $(NAME) $(OBJ) -L libft -lft minilibx/libmlx.a -lX11 -lXext -lm -march=native
 # Compil MacOs
-	@gcc -o $(NAME) $(OBJ) -L libft -lft -lmlx -framework OpenGL -framework Appkit -O3 -march=native
+	@gcc -o $(NAME) $(OBJ) -L libft -lft -lmlx -framework OpenGL -framework Appkit -O3
 
 
 %.o: %.c libft/libft.h
