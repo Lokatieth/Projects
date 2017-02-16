@@ -12,9 +12,9 @@
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
-# define W_Y 400
-# define W_X 400
-# define TAILLE 400
+# define W_X 1024
+# define W_Y 1024
+# define TAILLE 1024
 # define WIN_NAME "Fractol"
 # define POINTERMOTIONMASK (1L<<6)
 # define MOTIONNOTIFY 6
@@ -23,6 +23,8 @@
 # define KEYPRESSMASK (1L<<0)
 # define ZOOMPX (x * (s->x2 - s->oldx1) / TAILLE + s->oldx1)
 # define ZOOMPY (y * (s->y2 - s->oldy1) / TAILLE + s->oldy1)
+# define MT 36
+# define THE struct s_id
 
 # include <fcntl.h>
 # include <unistd.h>
@@ -31,6 +33,14 @@
 # include <stdio.h>
 # include "libft/libft.h"
 # include <math.h>
+# include <pthread.h>
+
+typedef struct					s_thread
+{
+	int nb;
+	int lim[4];
+	THE *s;
+}								t_thread;
 
 typedef struct					s_id
 {
@@ -47,6 +57,7 @@ typedef struct					s_id
 	int							color;
 	int							img_x;
 	int							img_y;
+	long double					modif;
 	long double					c_r;
 	long double					c_r_base;
 	long double					z_r_base;
@@ -72,11 +83,13 @@ typedef struct					s_id
 	int							decaly;
 	int							decalx;
 	int							mouse_movement;
+	t_thread					t[MT];
 }								t_id;
 
 void							ft_check_arg(char *str, t_id *s, int argc);
-void							ft_draw_mandelbrot(t_id *s);
-void							ft_draw_julia(t_id *s);
+void							*ft_draw_mandelbrot(void *z);
+void							*ft_draw_julia(void *z);
+void							*ft_draw_root(void *z);
 void							ft_draw(t_id *s);
 void							mlx_image_put_pixel(t_id *s, int x, int y,
 								int col);
@@ -100,16 +113,15 @@ void							ft_draw_custom1(t_id *s);
 void							ft_draw_julibalia(t_id *s);
 void							ft_draw_kalandra(t_id *s);
 void							ft_draw_mandelibal(t_id *s);
-void							ft_draw_root(t_id *s);
-void							ft_draw_bluelet(t_id *s, int x, int y);
-void							ft_draw_fire(t_id *s, int x, int y);
-void							ft_draw_turgreen(t_id *s, int x, int y);
-void							ft_draw_smoke(t_id *s, int x, int y);
-void							ft_draw_retoba(t_id *s, int x, int y);
-void							ft_draw_golsil(t_id *s, int x, int y);
-void							ft_draw_tutobla(t_id *s, int x, int y);
-void							ft_choose_interior(t_id *s, int x, int y);
-void							ft_choose_exterior(t_id *s, int x, int y);
+void							ft_draw_fire(t_id *s, int x, int y, int i, long double z_i);
+void							ft_draw_bluelet(t_id *s, int x, int y, int i, long double z_i);
+void							ft_draw_turgreen(t_id *s, int x, int y, int i, long double z_i);
+void							ft_draw_smoke(t_id *s, int x, int y, int i, long double z_i);
+void							ft_draw_retoba(t_id *s, int x, int y, int i, long double z_i);
+void							ft_draw_golsil(t_id *s, int x, int y, int i, long double z_i);
+void							ft_draw_tutobla(t_id *s, int x, int y, int i, long double z_i);
+void							ft_choose_interior(t_id *s, int x, int y, int i, long double z_i);
+void							ft_choose_exterior(t_id *s, int x, int y, int i, long double z_i);
 int								single_press(int keycode, t_id *param);
 int								key_reaction(int keycode, t_id *param);
 int								mouse_reaction(int button, int x, int y,

@@ -72,16 +72,43 @@ int		key_reaction(int keycode, t_id *param)
 		param->decaly += 3;
 	if (keycode == 125)
 		param->decaly -= 3;
+	if (keycode == 34)
+		param->modif = param->modif * 1.1;
+	if (keycode == 31)
+		param->modif = param->modif / 1.1;
 	ft_recreate_img(param);
 	ft_draw(param);
 	return (0);
+}
+
+void		init_thread(t_thread *t, t_id *s)
+{
+	int i;
+	int j;
+	int k;
+
+	i = 0;
+	j = W_X / sqrt(MT);
+	k = W_Y / sqrt(MT);
+	while (i < MT)
+	{
+		t[i].nb = i;
+		t[i].lim[0] = i % (int)sqrt(MT) * j;
+		t[i].lim[1] = (int)(i / sqrt(MT)) * k;
+		t[i].lim[2] = i % (int)sqrt(MT) * j + j;
+		t[i].lim[3] = (int)(i / sqrt(MT)) * k + k;
+		t[i].s = s;
+		++i;
+	}
+	s->modif = 1;
 }
 
 int		main(int argc, char **argv)
 {
 	t_id *s;
 
-	s = (t_id*)malloc(sizeof(t_id) * 100);
+	s = (t_id*)malloc(sizeof(t_id) * 2);
+	init_thread(s->t, s);
 	ft_check_arg(argv[1], s, argc);
 	return (0);
 }

@@ -34,7 +34,7 @@ SRC =	main.c\
 
 OBJ = $(SRC:.c=.o)
 
-GCCF =  -Wall -Wextra -Werror
+GCCF =  -Wall -Wextra -Werror -O3 -march=native
 
 all: $(NAME)
 

@@ -54,10 +54,10 @@ void	ft_draw_julibalia(t_id *s)
 				s->z_r = sqrt(s->z_r - s->z_r) - sqrt(s->z_i * s->z_i) + s->c_r;
 				s->z_i = 2 * s->z_i * s->tmp + s->c_i;
 			}
-			if (s->i == s->it_max)
-				ft_choose_interior(s, x, y);
-			else
-				ft_choose_exterior(s, x, y);
+			// if (s->i == s->it_max)
+				// ft_choose_interior(s, x, y);
+			// else
+				// ft_choose_exterior(s, x, y);
 		}
 	}
 	mlx_put_image_to_window(s->mlx, s->win, s->img, 0, 0);

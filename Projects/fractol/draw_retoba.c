@@ -13,10 +13,10 @@
 #include "fractol.h"
 #include "retoba.h"
 
-void	ft_draw_retoba(t_id *s, int x, int y)
+void	ft_draw_retoba(t_id *s, int x, int y, int i, long double z_i)
 {
 	static int retoba[1200] = {RETOBA};
 
-	mlx_image_put_pixel(s, x, y, retoba[(int)(fabsl(fmod(s->i * 20 *
-		s->z_i, 999)))]);
+	mlx_image_put_pixel(s, x, y, retoba[(int)(fabsl(fmod(i * 20 *
+		z_i* s->modif, 999)))]);
 }

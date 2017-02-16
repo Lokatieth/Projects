@@ -6,7 +6,7 @@
 /*   By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/05 15:05:51 by yyang             #+#    #+#             */
-/*   Updated: 2016/11/30 07:51:43 by vbauguen         ###   ########.fr       */
+/*   Updated: 2017/02/11 10:56:02 by vbauguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,6 @@ int					get_next_line(int fd, char **line);
 char				*ft_itoa_base(long long int number, unsigned int base);
 char				*ft_strtolower(char *str);
 char				*ft_strtoupper(char *str);
+char				*ft_str_replace(char *str, char *dest, int start, int len);
+
 #endif

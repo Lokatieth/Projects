@@ -54,10 +54,10 @@ void	ft_draw_custom1(t_id *s)
 				s->z_i = 2 * s->z_i * s->z_r + s->c_i;
 				s->i = s->i + 1;
 			}
-			if (s->i == s->it_max)
-				ft_choose_interior(s, x, y);
-			else
-				ft_choose_exterior(s, x, y);
+			// if (s->i == s->it_max)
+				// ft_choose_interior(s, x, y);
+			// else
+				// ft_choose_exterior(s, x, y);
 		}
 	}
 	mlx_put_image_to_window(s->mlx, s->win, s->img, 0, 0);

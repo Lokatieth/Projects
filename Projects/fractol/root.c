@@ -34,31 +34,36 @@ void	ft_initialization_root(t_id *s)
 	s->bpp = s->bit_per_pixel / 8;
 }
 
-void	ft_draw_root(t_id *s)
+void	*ft_draw_root(void *z)
 {
-	int y;
-	int x;
+	int l[2];
+	int i;
+	t_thread *m;
+	long double z_r;
+	long double z_i;
+	long double tmp;
 
-	x = -1;
-	while (++x < W_X)
+	m = (t_thread*)z;
+	l[0] = m->lim[0] - 1;
+	while (++l[0] < m->lim[2])
 	{
-		y = -1;
-		while (++y < W_Y)
+		l[1] = m->lim[1] - 1;
+		while (++l[1] < m->lim[3])
 		{
-			s->z_r = (x * (s->x2 - s->x1) / W_X + s->x1) * s->zoom;
-			s->z_i = (y * (s->y2 - s->y1) / W_Y + s->y1) * s->zoom;
-			s->i = -1;
-			while (++s->i < s->it_max && s->z_r * s->z_r + s->z_i * s->z_i < 4)
+			z_r = (l[0] * (m->s->x2 - m->s->x1) / W_X + m->s->x1) * m->s->zoom;
+			z_i = (l[1] * (m->s->y2 - m->s->y1) / W_Y + m->s->y1) * m->s->zoom;
+			i = -1;
+			while (++i < m->s->it_max && sqrt(z_r * z_r) + sqrt(z_i * z_i) < 4)
 			{
-				s->tmp = s->z_r * 2;
-				s->z_r = sqrt(s->z_r * s->z_r) - sqrt(s->z_i * s->z_i) + s->c_r;
-				s->z_i = 2 * s->z_i * s->tmp + s->c_i;
+				tmp = z_r * 2;
+				z_r = z_r * z_r - z_i * z_i + m->s->c_r;
+				z_i = 2 * z_i * tmp + m->s->c_i;
 			}
-			if (s->i == s->it_max)
-				ft_choose_interior(s, x, y);
+			if (i == m->s->it_max)
+				ft_choose_interior(m->s, l[0], l[1], i, z_i);
 			else
-				ft_choose_exterior(s, x, y);
+				ft_choose_exterior(m->s, l[0], l[1], i, z_i);
 		}
 	}
-	mlx_put_image_to_window(s->mlx, s->win, s->img, 0, 0);
+	return(NULL);
 }

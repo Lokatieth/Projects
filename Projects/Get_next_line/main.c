@@ -14,6 +14,6 @@ int main(int argc, char const *argv[])
 	{
 		printf("%s\n", line);
 	}
-
+	printf("%d\n", get_next_line(fd, &line));
 	return 0;
 }

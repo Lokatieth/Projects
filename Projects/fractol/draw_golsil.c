@@ -13,10 +13,10 @@
 #include "fractol.h"
 #include "golsil.h"
 
-void	ft_draw_golsil(t_id *s, int x, int y)
+void	ft_draw_golsil(t_id *s, int x, int y, int i, long double z_i)
 {
 	static int golsil[1200] = {GOLSIL};
 
-	mlx_image_put_pixel(s, x, y, golsil[(int)(fabsl(fmod(s->i * 20 *
-		s->z_i, 999)))]);
+	mlx_image_put_pixel(s, x, y, golsil[(int)(fabsl(fmod(i * 20 *
+		z_i* s->modif, 999)))]);
 }

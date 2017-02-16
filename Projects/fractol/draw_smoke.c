@@ -13,10 +13,10 @@
 #include "fractol.h"
 #include "smoke.h"
 
-void	ft_draw_smoke(t_id *s, int x, int y)
+void	ft_draw_smoke(t_id *s, int x, int y, int i, long double z_i)
 {
 	static int smoke[1200] = {SMOKE};
 
-	mlx_image_put_pixel(s, x, y, smoke[(int)(fabsl(fmod(s->i * 20 *
-		s->z_i, 999)))]);
+	mlx_image_put_pixel(s, x, y, smoke[(int)(fabsl(fmod(i * 20 *
+		z_i* s->modif, 999)))]);
 }

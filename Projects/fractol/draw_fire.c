@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 
 #include "fractol.h"
-#include "fire.h"
+#include "test.h"
 
-void	ft_draw_fire(t_id *s, int x, int y)
+void	ft_draw_fire(t_id *s, int x, int y, int i, long double z_i)
 {
-	static int fire[1200] = {FIRE};
+	static int fire[1200] = {TEST};
 
-	mlx_image_put_pixel(s, x, y, fire[(int)(fabsl(fmod(s->i * 20 *
-		s->z_i, 999)))]);
+	mlx_image_put_pixel(s, x, y, fire[(int)(fabsl(fmod(999 - i *z_i * z_i * s->modif, 999)))]);
+	
 }

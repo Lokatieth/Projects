@@ -1,55 +1,83 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: vbauguen <vbauguen@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2015/11/26 11:26:20 by vbauguen          #+#    #+#              #
-#    Updated: 2016/12/01 01:28:27 by vbauguen         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME = libftprintf.a
+# NAME = printf
 
-RED=\033[0;31m
-GREEN=\033[0;32m
-ORANGE=\033[0;33m
-BLUE=\033[0;34m
-PURPLE=\033[0;35m
-CYAN=\033[0;36m
-GRAY=\033[0;37m
-LCYAN=\033[1;36m
-LPURPLE=\033[1;35m
-NC=\033[0m
 
-NAME = printftest\
+SRCSPATH = srcs/
 
-SRC =	main.c\
+INCLUDES = includes/
+
+LIBFT_INCLUDES = libft/
+
+SRCS =	main.c \
+		xipodux.c \
+		param_struct.c \
+		modulo_majdou_s.c \
+		get_params.c \
+		parse_and_check.c \
+		ft_atoi.c \
+		ft_bzero.c \
+		ft_itoa_base.c \
+		ft_memset.c \
+		ft_putstr.c \
+		ft_str_replace.c \
+		ft_strchr.c \
+		ft_strjoinopt.c \
+		ft_strjoin.c \
+		ft_size_int.c \
+		ft_strlen.c \
+		ft_strnew.c \
+		ft_strtolower.c \
+		ft_isdigit.c \
+		ft_isspace.c \
+		ft_memcpy.c \
+		ft_strdup.c \
+		ft_strrev.c \
+		ft_tolower.c \
+
+
+
+SRC = $(addprefix $(SRCSPATH), $(SRCS))
+
+WFLAGS = -Wall -Werror -Wextra
+
+LFLAGS =
+
+CC = gcc
 
 OBJ = $(SRC:.c=.o)
 
-GCCF = -Wall -Werror -Wextra 
+all : $(NAME)
 
-all: $(NAME)
-	@echo  "${GREEN}Make completed${NC}"
+%.o: %.c
+	$(CC) -c $(WFLAGS) -I $(LIBFT_INCLUDES) -I $(INCLUDES) $< -o $@
 
-$(NAME): $(OBJ)	
-	@make -C libft
-# Compil Linux
-	@# gcc -o $(NAME) $(OBJ) -L libft -lft -lm -march=native
-# Compil MacOs
-	@gcc -o $(NAME) $(OBJ) -L libft -lft -lmlx -framework OpenGL -framework Appkit -O3 -march=native
+# $(NAME) : $(OBJ)
+# #	make -C libft
+# 	$(CC) -o $(NAME) $(OBJ) $(WFLAGS) $(LFLAGS) -I $(INCLUDES)
 
-%.o: %.c libft/libft.h
-	@gcc -c $(GCCF) -I libft/ $< -o $@
+# Compil libft.a
 
-.PHONY: clean fclean re
 
-clean:
-	@rm -rf $(OBJ)
-	@make -C libft clean
+$(NAME): $(OBJ)
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME) 
 
-fclean: clean
-	@rm -rf $(NAME)
-	@make -C libft fclean
+exec: fclean $(NAME)
+#	make -C libft
+	$(CC) -o $(NAME) $(OBJ) $(WFLAGS) $(LFLAGS) -I $(INCLUDES) -g
+	./libftprintf.a
 
-re: fclean all
+clean :
+	rm -rf $(OBJ)
+	make -C libft clean
+
+fclean : clean
+	rm -f $(NAME)
+	# make -C libft fclean
+
+re : fclean all
+
+.PHONY: all clean fclean re
+
+
+
