@@ -15,8 +15,18 @@
 
 int		ft_julia_mouse(int x, int y, t_id *s)
 {
+<<<<<<< HEAD
 	if (y == 0)
 		return (0);
+=======
+	static int i = 0;
+
+	i++;
+
+	if (i % 10 == 0)
+	{
+
+>>>>>>> b7002166af60a79808384258a693f5d512987c35
 	if (s->mouse_movement == 1)
 	{
 		s->c_r = s->c_r_base * y / W_Y;
@@ -24,6 +34,7 @@ int		ft_julia_mouse(int x, int y, t_id *s)
 		ft_recreate_img(s);
 		ft_draw(s);
 	}
+}
 	return (0);
 }
 
