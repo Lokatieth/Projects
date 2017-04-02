@@ -2,7 +2,7 @@ The repository contains school and personal projects.
 
 
 
-FdF : wireframe map modelization
+FdF : wireframe map modelization \n
 Fract'ol : different 2d fractal equations and variants modelization
 Wolf3d : textured raycaster
 RT : rather complete raytracer (textures, reflections, refractions, .obj parser and more)
